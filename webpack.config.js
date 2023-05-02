@@ -17,11 +17,50 @@ module.exports = {
         filename: 'index.html',
       }),
 
+      new WebpackPwaManifest({
+        name: 'My Text Editor',
+        short_name: 'TextEditor',
+        description: 'A simple text editor application',
+        background_color: '#ffffff',
+        crossorigin: 'use-credentials',
+        icons: [
+          {
+            src: path.resolve('src/assets/icon.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('icons'),
+          },
+        ],
+      }),
+      new WebpackPwaManifest({
+        name: 'TextTinker',
+        short_name: 'TextTinker',
+        description: 'A simple text editor application',
+        background_color: '#ffffff',
+        crossorigin: 'use-credentials',
+        icons: [
+          {
+            src: path.resolve('src/assets/icon.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('icons'),
+          },
+        ],
+      }),
       new WorkboxWebpackPlugin.InjectManifest({
-// add webpack plugin
+        swSrc: './src/service-worker.js',
       }),
     ],
     module: {
-// add rule to handle images
-    },
-};
+        rules: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+              },
+            },
+          },
+        ],
+      },
+    };
