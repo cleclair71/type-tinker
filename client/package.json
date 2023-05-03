@@ -1,5 +1,5 @@
 {
-  "name": "JATE",
+  "name": "texttinker",
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack --mode production",
