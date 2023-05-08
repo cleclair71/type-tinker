@@ -1,44 +1,55 @@
-const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
-const { CacheFirst } = require('workbox-strategies');
+const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
 const { registerRoute } = require('workbox-routing');
+const { CacheFirst, StaleWhileRevalidate } = require('workbox-strategies');
 const { CacheableResponsePlugin } = require('workbox-cacheable-response');
 const { ExpirationPlugin } = require('workbox-expiration');
-const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
+const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
 
 precacheAndRoute(self.__WB_MANIFEST);
 
 const pageCache = new CacheFirst({
-  cacheName: 'page-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-    new ExpirationPlugin({
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    }),
-  ],
+    cacheName: 'pages',
+    plugins: [
+        new CacheableResponsePlugin({
+            statuses: [0, 200],
+        }),
+        new ExpirationPlugin({
+            maxAgeSeconds: 60 * 60 * 24 * 7,
+        }),
+    ],
 });
 
 warmStrategyCache({
-  urls: ['/index.html', '/'],
-  strategy: pageCache,
+    urls: ['/index.html', '/'],
+    strategy: pageCache,
 });
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
-// Implement asset caching
-const assetCache = new CacheFirst({
-  cacheName: 'asset-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-    new ExpirationPlugin({
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    }),
-  ],
-});
-
+registerRoute(({ request }) => ['style', 'script', 'worker'].includes(request.destination),
+    new StaleWhileRevalidate({
+        cacheName: 'assets',
+        plugins: [
+            new CacheableResponsePlugin({
+                statuses: [0, 200],
+            }),
+        ],
+    }));
+    
+// Cache CodeMirror assets
 registerRoute(
-  ({ request }) => request.destination === 'style' || request.destination === 'script' || request.destination === 'image',
+    /^https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/codemirror\/.*/,
+    new CacheFirst({
+        cacheName: 'codemirror',
+        plugins: [
+            new CacheableResponsePlugin({
+                statuses: [0, 200],
+            }),
+            new ExpirationPlugin({
+                maxAgeSeconds: 60 * 60 * 24 * 30, // Cache for 30 days
+            }),
+        ],
+    }),
+    'GET'
 );
+
