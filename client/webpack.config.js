@@ -9,6 +9,7 @@ module.exports = () => {
     entry: {
       main: './src/js/index.js',
       install: './src/js/install.js',
+      sw: './src-sw.js',
     },
     output: {
       filename: '[name].bundle.js',
@@ -17,14 +18,14 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'TextTinker',
+        title: 'jate',
         favicon: './favicon.ico'
       }),
 
       new WebpackPwaManifest({
         filename: 'manifest.json',
-        name: 'TextTinker',
-        short_name: 'TextTinker',
+        name: 'jate',
+        short_name: 'jate',
         description: 'A simple text editor application',
         fingerprint: false,
         inject: true,

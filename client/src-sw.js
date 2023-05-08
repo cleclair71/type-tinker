@@ -1,9 +1,9 @@
-const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
+const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
+const { StaleWhileRevalidate, CacheFirst } = require('workbox-strategies');
 const { registerRoute } = require('workbox-routing');
-const { CacheFirst, StaleWhileRevalidate } = require('workbox-strategies');
 const { CacheableResponsePlugin } = require('workbox-cacheable-response');
 const { ExpirationPlugin } = require('workbox-expiration');
-const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
+const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
 
 precacheAndRoute(self.__WB_MANIFEST);
 
@@ -35,21 +35,21 @@ registerRoute(({ request }) => ['style', 'script', 'worker'].includes(request.de
             }),
         ],
     }));
-    
+
 // Cache CodeMirror assets
-registerRoute(
-    /^https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/codemirror\/.*/,
-    new CacheFirst({
-        cacheName: 'codemirror',
-        plugins: [
-            new CacheableResponsePlugin({
-                statuses: [0, 200],
-            }),
-            new ExpirationPlugin({
-                maxAgeSeconds: 60 * 60 * 24 * 30, // Cache for 30 days
-            }),
-        ],
-    }),
-    'GET'
-);
+// registerRoute(
+//     /^https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/codemirror\/.*/,
+//     new CacheFirst({
+//         cacheName: 'codemirror',
+//         plugins: [
+//             new CacheableResponsePlugin({
+//                 statuses: [0, 200],
+//             }),
+//             new ExpirationPlugin({
+//                 maxAgeSeconds: 60 * 60 * 24 * 30, // Cache for 30 days
+//             }),
+//         ],
+//     }),
+//     'GET'
+// );
 
