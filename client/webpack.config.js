@@ -8,8 +8,8 @@ module.exports = () => {
     mode: 'development',
     entry: {
       main: './src/js/index.js',
-      install: './src/js/install.js',
-      sw: './src-sw.js',
+      install: './src/js/install.js'
+    
     },
     output: {
       filename: '[name].bundle.js',
@@ -18,21 +18,26 @@ module.exports = () => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html',
-        title: 'jate',
-        favicon: './favicon.ico'
+        title: 'J.A.T.E.'
+        // favicon: './favicon.ico'
+      }),
+
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
       }),
 
       new WebpackPwaManifest({
         filename: 'manifest.json',
-        name: 'jate',
-        short_name: 'jate',
+        name: 'Just another text editor',
+        short_name: 'J.A.T.E.',
         description: 'A simple text editor application',
         fingerprint: false,
         inject: true,
         background_color: '#225ca3',
         theme_color: '#225ca3',
-        start_url: './',
-        publicPath: './',
+        start_url: '/',
+        publicPath: '/',
         icons: [
           {
             src: path.resolve('src/images/logo.png'),
@@ -41,14 +46,16 @@ module.exports = () => {
           },
         ],
       }),
-      new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'src-sw.js',
-      }),
+     
     ],
 
     module: {
       rules: [
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+
         {
           test: /\.m?js$/,
           exclude: /node_modules/,
@@ -60,10 +67,7 @@ module.exports = () => {
             },
           },
         },
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
-        },
+       
       ],
     },
   };
