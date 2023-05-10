@@ -32,7 +32,7 @@
 <a name="description"></a>
 ## :rocket: About The Project
 <p align="center">
-  <img src="/assets/screen.JPG"/>
+  <img src="client\src\images\Capture.JPG"/>
 </p>
 JATE is a singe-page application text editor that meets the criteria of a Progressive Web Application (PWA).  It includes data persistence techniques that serve as redundancy in case one of the options is not supported by the browser and the application will function offline.
 
@@ -58,7 +58,7 @@ JATE is a singe-page application text editor that meets the criteria of a Progre
 
 ## :hammer_and_wrench: Installation
 
-1. Visit the deployed website
+1. Visit the [deployed website](https://text-tinker.herokuapp.com/)
 2. Click install to download app
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
